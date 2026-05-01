@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const cors = require("cors"); // 👈 AGGIUNTO
 
 const authRoutes = require("./routes/authRoutes");
 const workoutRoutes = require("./routes/workoutRoutes");
@@ -11,6 +12,9 @@ const app = express();
 
 // DB
 connectDB();
+
+// 🔥 CORS (FONDAMENTALE)
+app.use(cors());
 
 // Middleware
 app.use(express.json());

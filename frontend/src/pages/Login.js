@@ -23,6 +23,10 @@ function Login() {
             localStorage.setItem("token", res.data.token);
 
             alert("Login riuscito 🚀");
+
+            // 🔥 REDIRECT ALLA DASHBOARD
+            window.location.href = "/dashboard";
+
         } catch (error) {
             console.error(error);
             alert("Errore login");
