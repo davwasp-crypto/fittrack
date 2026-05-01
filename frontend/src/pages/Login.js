@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate(); // 👈 IMPORTANTISSIMO
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,8 +27,8 @@ function Login() {
 
             alert("Login riuscito 🚀");
 
-            // 🔥 REDIRECT ALLA DASHBOARD
-            window.location.href = "/dashboard";
+            // 🔥 REDIRECT CORRETTO
+            navigate("/dashboard");
 
         } catch (error) {
             console.error(error);
