@@ -132,6 +132,8 @@ function Dashboard() {
                         placeholder="Esercizio"
                         value={exercise}
                         onChange={(e) => setExercise(e.target.value)}
+                        onFocus={(e) => e.target.style.border = "1px solid #4CAF50"}
+                        onBlur={(e) => e.target.style.border = "1px solid #ccc"}
                         style={{
                             width: "100%",
                             padding: "10px",
@@ -146,6 +148,8 @@ function Dashboard() {
                         placeholder="Durata (min)"
                         value={duration}
                         onChange={(e) => setDuration(e.target.value)}
+                        onFocus={(e) => e.target.style.border = "1px solid #4CAF50"}
+                        onBlur={(e) => e.target.style.border = "1px solid #ccc"}
                         style={{
                             width: "100%",
                             padding: "10px",
@@ -160,6 +164,8 @@ function Dashboard() {
                         placeholder="Note"
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
+                        onFocus={(e) => e.target.style.border = "1px solid #4CAF50"}
+                        onBlur={(e) => e.target.style.border = "1px solid #ccc"}
                         style={{
                             width: "100%",
                             padding: "10px",

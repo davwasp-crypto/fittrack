@@ -58,6 +58,8 @@ function Login() {
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        onFocus={(e) => e.target.style.border = "1px solid #4CAF50"}
+                        onBlur={(e) => e.target.style.border = "1px solid #ccc"}
                         style={{
                             width: "100%",
                             padding: "10px",
@@ -72,6 +74,8 @@ function Login() {
                         type="password"
                         placeholder="Password"
                         value={password}
+                        onFocus={(e) => e.target.style.border = "1px solid #4CAF50"}
+                        onBlur={(e) => e.target.style.border = "1px solid #ccc"}
                         onChange={(e) => setPassword(e.target.value)}
                         style={{
                             width: "100%",
