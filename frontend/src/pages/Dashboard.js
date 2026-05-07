@@ -31,6 +31,7 @@ function Dashboard() {
 
     useEffect(() => {
         fetchWorkouts();
+        // eslint-disable-next-line
     }, []);
 
     // CREATE
