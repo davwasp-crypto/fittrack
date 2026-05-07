@@ -16,7 +16,7 @@ function Dashboard() {
 
         try {
             const res = await axios.get(
-                "http://localhost:5000/api/workouts",
+                "https://fittrack-k81j.onrender.com/api/workouts",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -39,7 +39,7 @@ function Dashboard() {
 
         try {
             await axios.post(
-                "http://localhost:5000/api/workouts",
+                "https://fittrack-k81j.onrender.com/api/workouts",
                 {
                     exercise,
                     duration: Number(duration),
@@ -66,7 +66,7 @@ function Dashboard() {
     const handleDelete = async (id) => {
         try {
             await axios.delete(
-                `http://localhost:5000/api/workouts/${id}`,
+                `https://fittrack-k81j.onrender.com/api/workouts/${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${getToken()}`,
