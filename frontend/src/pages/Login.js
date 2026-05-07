@@ -13,7 +13,7 @@ function Login() {
 
         try {
             const res = await axios.post(
-                "https://fittrack-k81j.onrender.com",
+                "https://fittrack-k81j.onrender.com/api/auth/login",
                 {
                     email,
                     password,
