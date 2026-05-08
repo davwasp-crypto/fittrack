@@ -11,6 +11,7 @@ function Dashboard() {
     const [editExercise, setEditExercise] = useState("");
     const [editDuration, setEditDuration] = useState("");
     const [editNotes, setEditNotes] = useState("");
+    const [darkMode, setDarkMode] = useState(false);
     const getToken = () => localStorage.getItem("token");
 
     // GET WORKOUTS
@@ -44,6 +45,11 @@ function Dashboard() {
         }
 
         fetchWorkouts();
+        const savedTheme = localStorage.getItem("darkMode");
+
+        if (savedTheme === "true") {
+            setDarkMode(true);
+        }
 
         // eslint-disable-next-line
     }, []);
@@ -136,11 +142,18 @@ function Dashboard() {
         window.location.href = "/";
     };
 
+    const toggleDarkMode = () => {
+        const newMode = !darkMode;
+
+        setDarkMode(newMode);
+
+        localStorage.setItem("darkMode", newMode);
+    };
     return (
         <div
             style={{
                 minHeight: "100vh",
-                background: "#f4f6f8",
+                background: darkMode ? "#121212" : "#f4f6f8",
                 display: "flex",
                 justifyContent: "center",
                 padding: "40px 15px",
@@ -150,15 +163,19 @@ function Dashboard() {
                 style={{
                     width: "100%",
                     maxWidth: "380px",
-                    background: "#fff",
+                    background: darkMode ? "#1e1e1e" : "#fff",
                     padding: "25px",
                     borderRadius: "12px",
                     boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
                 }}
             >
-                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-                    FitTrack 💪
-                </h2>
+                <h2
+                    style={{
+                        textAlign: "center",
+                        marginBottom: "20px",
+                        color: darkMode ? "white" : "black",
+                    }}
+                ></h2>
 
                 <button
                     onClick={handleLogout}
@@ -174,6 +191,22 @@ function Dashboard() {
                     }}
                 >
                     Logout
+                </button>
+
+                <button
+                    onClick={toggleDarkMode}
+                    style={{
+                        width: "100%",
+                        marginBottom: "15px",
+                        background: darkMode ? "#444" : "#ddd",
+                        color: darkMode ? "white" : "black",
+                        border: "none",
+                        padding: "10px",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                    }}
+                >
+                    {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
                 </button>
 
                 {/* FORM */}
