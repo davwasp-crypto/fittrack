@@ -74,9 +74,9 @@ function Login() {
                         type="password"
                         placeholder="Password"
                         value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         onFocus={(e) => e.target.style.border = "1px solid #4CAF50"}
                         onBlur={(e) => e.target.style.border = "1px solid #ccc"}
-                        onChange={(e) => setPassword(e.target.value)}
                         style={{
                             width: "100%",
                             padding: "10px",
@@ -102,6 +102,18 @@ function Login() {
                         Accedi
                     </button>
                 </form>
+
+                {/* 🔥 LINK REGISTRAZIONE */}
+                <p style={{ marginTop: "15px", textAlign: "center" }}>
+                    Non hai un account?{" "}
+                    <span
+                        style={{ color: "#4CAF50", cursor: "pointer", fontWeight: "bold" }}
+                        onClick={() => navigate("/register")}
+                    >
+                        Registrati
+                    </span>
+                </p>
+
             </div>
         </div>
     );
