@@ -6,12 +6,17 @@ function Dashboard() {
     const [exercise, setExercise] = useState("");
     const [duration, setDuration] = useState("");
     const [notes, setNotes] = useState("");
+    const [editingId, setEditingId] = useState(null);
 
+    const [editExercise, setEditExercise] = useState("");
+    const [editDuration, setEditDuration] = useState("");
+    const [editNotes, setEditNotes] = useState("");
     const getToken = () => localStorage.getItem("token");
 
     // GET WORKOUTS
     const fetchWorkouts = async () => {
         const token = getToken();
+
         if (!token) return;
 
         try {
@@ -23,6 +28,7 @@ function Dashboard() {
                     },
                 }
             );
+
             setWorkouts(res.data);
         } catch (error) {
             console.error("GET ERROR:", error);
@@ -38,6 +44,7 @@ function Dashboard() {
         }
 
         fetchWorkouts();
+
         // eslint-disable-next-line
     }, []);
 
@@ -67,6 +74,80 @@ function Dashboard() {
             fetchWorkouts();
         } catch (error) {
             console.error("POST ERROR:", error);
+        }
+    };
+
+    // UPDATE
+    const handleUpdate = async (workout) => {
+        const newExercise = prompt(
+            "Nuovo esercizio",
+            workout.exercise
+        );
+
+        const newDuration = prompt(
+            "Nuova durata",
+            workout.duration
+        );
+
+        const newNotes = prompt(
+            "Nuove note",
+            workout.notes
+        );
+
+        if (!newExercise || !newDuration) return;
+
+        try {
+            await axios.put(
+                `https://fittrack-k81j.onrender.com/api/workouts/${workout._id}`,
+                {
+                    exercise: newExercise,
+                    duration: Number(newDuration),
+                    notes: newNotes,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${getToken()}`,
+                    },
+                }
+            );
+
+            fetchWorkouts();
+        } catch (error) {
+            console.error("UPDATE ERROR:", error);
+        }
+    };
+
+    // START EDIT
+    const startEdit = (workout) => {
+        setEditingId(workout._id);
+
+        setEditExercise(workout.exercise);
+        setEditDuration(workout.duration);
+        setEditNotes(workout.notes);
+    };
+
+    // SAVE EDIT
+    const saveEdit = async (id) => {
+        try {
+            await axios.put(
+                `https://fittrack-k81j.onrender.com/api/workouts/${id}`,
+                {
+                    exercise: editExercise,
+                    duration: Number(editDuration),
+                    notes: editNotes,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${getToken()}`,
+                    },
+                }
+            );
+
+            setEditingId(null);
+
+            fetchWorkouts();
+        } catch (error) {
+            console.error("UPDATE ERROR:", error);
         }
     };
 
@@ -135,13 +216,16 @@ function Dashboard() {
                 </button>
 
                 {/* FORM */}
-                <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
+                <form
+                    onSubmit={handleSubmit}
+                    style={{ marginBottom: "20px" }}
+                >
                     <input
                         placeholder="Esercizio"
                         value={exercise}
-                        onChange={(e) => setExercise(e.target.value)}
-                        onFocus={(e) => e.target.style.border = "1px solid #4CAF50"}
-                        onBlur={(e) => e.target.style.border = "1px solid #ccc"}
+                        onChange={(e) =>
+                            setExercise(e.target.value)
+                        }
                         style={{
                             width: "100%",
                             padding: "10px",
@@ -155,9 +239,9 @@ function Dashboard() {
                     <input
                         placeholder="Durata (min)"
                         value={duration}
-                        onChange={(e) => setDuration(e.target.value)}
-                        onFocus={(e) => e.target.style.border = "1px solid #4CAF50"}
-                        onBlur={(e) => e.target.style.border = "1px solid #ccc"}
+                        onChange={(e) =>
+                            setDuration(e.target.value)
+                        }
                         style={{
                             width: "100%",
                             padding: "10px",
@@ -171,9 +255,9 @@ function Dashboard() {
                     <input
                         placeholder="Note"
                         value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                        onFocus={(e) => e.target.style.border = "1px solid #4CAF50"}
-                        onBlur={(e) => e.target.style.border = "1px solid #ccc"}
+                        onChange={(e) =>
+                            setNotes(e.target.value)
+                        }
                         style={{
                             width: "100%",
                             padding: "10px",
@@ -202,7 +286,9 @@ function Dashboard() {
 
                 {/* LISTA */}
                 {workouts.length === 0 ? (
-                    <p style={{ textAlign: "center" }}>Nessun workout</p>
+                    <p style={{ textAlign: "center" }}>
+                        Nessun workout
+                    </p>
                 ) : (
                     workouts.map((w) => (
                         <div
@@ -213,34 +299,140 @@ function Dashboard() {
                                 borderRadius: "10px",
                                 marginBottom: "12px",
                                 textAlign: "left",
-                                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                                boxShadow:
+                                    "0 2px 8px rgba(0,0,0,0.08)",
                             }}
                         >
-                            <p style={{ fontWeight: "bold", margin: "0 0 5px 0" }}>
-                                {w.exercise}
-                            </p>
+                            {editingId === w._id ? (
+                                <>
+                                    <input
+                                        value={editExercise}
+                                        onChange={(e) =>
+                                            setEditExercise(e.target.value)
+                                        }
+                                        style={{
+                                            width: "100%",
+                                            padding: "8px",
+                                            marginBottom: "8px",
+                                            borderRadius: "6px",
+                                            border: "1px solid #ccc",
+                                            boxSizing: "border-box",
+                                        }}
+                                    />
 
-                            <p style={{ margin: "0 0 5px 0", color: "#555" }}>
-                                ⏱ {w.duration} min
-                            </p>
+                                    <input
+                                        value={editDuration}
+                                        onChange={(e) =>
+                                            setEditDuration(e.target.value)
+                                        }
+                                        style={{
+                                            width: "100%",
+                                            padding: "8px",
+                                            marginBottom: "8px",
+                                            borderRadius: "6px",
+                                            border: "1px solid #ccc",
+                                            boxSizing: "border-box",
+                                        }}
+                                    />
 
-                            <p style={{ margin: "0 0 10px 0" }}>
-                                {w.notes}
-                            </p>
+                                    <input
+                                        value={editNotes}
+                                        onChange={(e) =>
+                                            setEditNotes(e.target.value)
+                                        }
+                                        style={{
+                                            width: "100%",
+                                            padding: "8px",
+                                            marginBottom: "10px",
+                                            borderRadius: "6px",
+                                            border: "1px solid #ccc",
+                                            boxSizing: "border-box",
+                                        }}
+                                    />
 
-                            <button
-                                onClick={() => handleDelete(w._id)}
-                                style={{
-                                    background: "#ff4d4d",
-                                    color: "white",
-                                    border: "none",
-                                    padding: "6px 10px",
-                                    borderRadius: "5px",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                Elimina
-                            </button>
+                                    <button
+                                        onClick={() => saveEdit(w._id)}
+                                        style={{
+                                            background: "#4CAF50",
+                                            color: "white",
+                                            border: "none",
+                                            padding: "6px 10px",
+                                            borderRadius: "5px",
+                                            cursor: "pointer",
+                                            marginRight: "10px",
+                                        }}
+                                    >
+                                        Salva
+                                    </button>
+
+                                    <button
+                                        onClick={() => setEditingId(null)}
+                                        style={{
+                                            background: "#999",
+                                            color: "white",
+                                            border: "none",
+                                            padding: "6px 10px",
+                                            borderRadius: "5px",
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        Annulla
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <p
+                                        style={{
+                                            fontWeight: "bold",
+                                            margin: "0 0 5px 0",
+                                        }}
+                                    >
+                                        {w.exercise}
+                                    </p>
+
+                                    <p
+                                        style={{
+                                            margin: "0 0 5px 0",
+                                            color: "#555",
+                                        }}
+                                    >
+                                        ⏱ {w.duration} min
+                                    </p>
+
+                                    <p style={{ margin: "0 0 10px 0" }}>
+                                        {w.notes}
+                                    </p>
+
+                                    <button
+                                        onClick={() => startEdit(w)}
+                                        style={{
+                                            background: "#4CAF50",
+                                            color: "white",
+                                            border: "none",
+                                            padding: "6px 10px",
+                                            borderRadius: "5px",
+                                            cursor: "pointer",
+                                            marginRight: "10px",
+                                        }}
+                                    >
+                                        Modifica
+                                    </button>
+
+                                    <button
+                                        onClick={() => handleDelete(w._id)}
+                                        style={{
+                                            background: "#ff4d4d",
+                                            color: "white",
+                                            border: "none",
+                                            padding: "6px 10px",
+                                            borderRadius: "5px",
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        Elimina
+                                    </button>
+                                </>
+                            )}
                         </div>
                     ))
                 )}
