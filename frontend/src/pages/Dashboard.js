@@ -77,45 +77,6 @@ function Dashboard() {
         }
     };
 
-    // UPDATE
-    const handleUpdate = async (workout) => {
-        const newExercise = prompt(
-            "Nuovo esercizio",
-            workout.exercise
-        );
-
-        const newDuration = prompt(
-            "Nuova durata",
-            workout.duration
-        );
-
-        const newNotes = prompt(
-            "Nuove note",
-            workout.notes
-        );
-
-        if (!newExercise || !newDuration) return;
-
-        try {
-            await axios.put(
-                `https://fittrack-k81j.onrender.com/api/workouts/${workout._id}`,
-                {
-                    exercise: newExercise,
-                    duration: Number(newDuration),
-                    notes: newNotes,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${getToken()}`,
-                    },
-                }
-            );
-
-            fetchWorkouts();
-        } catch (error) {
-            console.error("UPDATE ERROR:", error);
-        }
-    };
 
     // START EDIT
     const startEdit = (workout) => {

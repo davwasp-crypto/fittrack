@@ -15,7 +15,7 @@ function Login() {
         if (token) {
             navigate("/dashboard");
         }
-    }, []);
+    }, [navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
