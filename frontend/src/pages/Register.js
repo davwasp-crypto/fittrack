@@ -24,7 +24,7 @@ function Register() {
 
             localStorage.setItem("token", res.data.token);
 
-            navigate("/dashboard");
+            navigate("/dashboard", { replace: true });
         } catch (error) {
             alert("Errore registrazione");
         }
@@ -115,6 +115,21 @@ function Register() {
                         Registrati
                     </button>
                 </form>
+
+                {/* 🔥 TORNA LOGIN */}
+                <p style={{ marginTop: "15px", textAlign: "center" }}>
+                    Hai già un account?{" "}
+                    <span
+                        style={{
+                            color: "#4CAF50",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                        }}
+                        onClick={() => navigate("/")}
+                    >
+                        Accedi
+                    </span>
+                </p>
             </div>
         </div>
     );
