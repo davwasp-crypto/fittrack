@@ -24,30 +24,33 @@ function Register() {
 
             localStorage.setItem("token", res.data.token);
 
-            alert("Registrazione riuscita 🚀");
             navigate("/dashboard");
         } catch (error) {
-            console.error(error);
             alert("Errore registrazione");
         }
     };
 
     return (
-        <div style={{
-            minHeight: "100vh",
-            background: "#f4f6f8",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-        }}>
-            <div style={{
-                width: "100%",
-                maxWidth: "350px",
-                background: "#fff",
-                padding: "25px",
-                borderRadius: "12px",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-            }}>
+        <div
+            style={{
+                minHeight: "100vh",
+                background: "#f4f6f8",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "20px",
+            }}
+        >
+            <div
+                style={{
+                    width: "100%",
+                    maxWidth: "350px",
+                    background: "#fff",
+                    padding: "25px",
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                }}
+            >
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
                     Registrati ✍️
                 </h2>
@@ -57,7 +60,14 @@ function Register() {
                         placeholder="Username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        style={{ width: "100%", padding: "10px", marginBottom: "12px" }}
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            marginBottom: "12px",
+                            borderRadius: "6px",
+                            border: "1px solid #ccc",
+                            boxSizing: "border-box",
+                        }}
                     />
 
                     <input
@@ -65,7 +75,14 @@ function Register() {
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        style={{ width: "100%", padding: "10px", marginBottom: "12px" }}
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            marginBottom: "12px",
+                            borderRadius: "6px",
+                            border: "1px solid #ccc",
+                            boxSizing: "border-box",
+                        }}
                     />
 
                     <input
@@ -73,17 +90,28 @@ function Register() {
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        style={{ width: "100%", padding: "10px", marginBottom: "15px" }}
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            marginBottom: "15px",
+                            borderRadius: "6px",
+                            border: "1px solid #ccc",
+                            boxSizing: "border-box",
+                        }}
                     />
 
-                    <button type="submit" style={{
-                        width: "100%",
-                        padding: "12px",
-                        background: "#4CAF50",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "6px",
-                    }}>
+                    <button
+                        type="submit"
+                        style={{
+                            width: "100%",
+                            padding: "12px",
+                            background: "#4CAF50",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                        }}
+                    >
                         Registrati
                     </button>
                 </form>

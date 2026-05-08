@@ -30,6 +30,13 @@ function Dashboard() {
     };
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            window.location.href = "/";
+            return;
+        }
+
         fetchWorkouts();
         // eslint-disable-next-line
     }, []);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +7,15 @@ function Login() {
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
+
+    // 🔥 SE GIÀ LOGGATO → DASHBOARD
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            navigate("/dashboard");
+        }
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -103,17 +112,19 @@ function Login() {
                     </button>
                 </form>
 
-                {/* 🔥 LINK REGISTRAZIONE */}
                 <p style={{ marginTop: "15px", textAlign: "center" }}>
                     Non hai un account?{" "}
                     <span
-                        style={{ color: "#4CAF50", cursor: "pointer", fontWeight: "bold" }}
+                        style={{
+                            color: "#4CAF50",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                        }}
                         onClick={() => navigate("/register")}
                     >
                         Registrati
                     </span>
                 </p>
-
             </div>
         </div>
     );
