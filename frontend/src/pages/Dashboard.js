@@ -175,7 +175,9 @@ function Dashboard() {
                         marginBottom: "20px",
                         color: darkMode ? "white" : "black",
                     }}
-                ></h2>
+                >
+                    FitTrack 💪
+                </h2>
 
                 <button
                     onClick={handleLogout}
