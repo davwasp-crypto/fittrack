@@ -291,9 +291,9 @@ function Dashboard() {
                 <div
                     style={{
                         width: "100%",
-                        height: 250,
+                        height: 280,
                         background: darkMode ? "#1e1e1e" : "#fff",
-                        padding: "15px",
+                        padding: "10px",
                         borderRadius: "12px",
                         marginBottom: "20px",
                         boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
@@ -308,7 +308,7 @@ function Dashboard() {
                         📊 Workout Chart
                     </h3>
 
-                    <ResponsiveContainer width="100%" height="85%">
+                    <ResponsiveContainer width="99%" height="90%">
                         <BarChart
                             data={chartData}
                             margin={{
