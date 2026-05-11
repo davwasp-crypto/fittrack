@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer,
+} from "recharts";
+
 function Dashboard() {
     const [workouts, setWorkouts] = useState([]);
     const [exercise, setExercise] = useState("");
@@ -149,6 +158,14 @@ function Dashboard() {
             ? Math.round(totalMinutes / totalWorkouts)
             : 0;
 
+    const chartData = workouts.map((workout) => ({
+        name:
+            workout.exercise.length > 8
+                ? workout.exercise.substring(0, 8) + "..."
+                : workout.exercise,
+        minuti: workout.duration,
+    }));
+
     // LOGOUT
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -268,6 +285,37 @@ function Dashboard() {
                     >
                         🔥 Media Workout: <b>{averageMinutes} min</b>
                     </div>
+                </div>
+
+                {/* CHART */}
+                <div
+                    style={{
+                        width: "100%",
+                        height: 250,
+                        background: darkMode ? "#1e1e1e" : "#fff",
+                        padding: "15px",
+                        borderRadius: "12px",
+                        marginBottom: "20px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                    }}
+                >
+                    <h3
+                        style={{
+                            marginBottom: "15px",
+                            color: darkMode ? "white" : "black",
+                        }}
+                    >
+                        📊 Workout Chart
+                    </h3>
+
+                    <ResponsiveContainer width="100%" height="85%">
+                        <BarChart data={chartData}>
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Bar dataKey="minuti" fill="#4CAF50" />
+                        </BarChart>
+                    </ResponsiveContainer>
                 </div>
 
                 {/* FORM */}
