@@ -458,6 +458,16 @@ function Dashboard() {
                                         {w.notes}
                                     </p>
 
+                                    <p
+                                        style={{
+                                            fontSize: "12px",
+                                            color: darkMode ? "#bbb" : "#777",
+                                            marginBottom: "10px",
+                                        }}
+                                    >
+                                        📅 {new Date(w.createdAt).toLocaleDateString()}
+                                    </p>
+
                                     <button
                                         onClick={() => startEdit(w)}
                                         style={{
