@@ -136,6 +136,19 @@ function Dashboard() {
         }
     };
 
+    // STATS
+    const totalWorkouts = workouts.length;
+
+    const totalMinutes = workouts.reduce(
+        (acc, workout) => acc + workout.duration,
+        0
+    );
+
+    const averageMinutes =
+        totalWorkouts > 0
+            ? Math.round(totalMinutes / totalWorkouts)
+            : 0;
+
     // LOGOUT
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -210,6 +223,52 @@ function Dashboard() {
                 >
                     {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
                 </button>
+
+                {/* STATS */}
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr",
+                        gap: "10px",
+                        marginBottom: "20px",
+                    }}
+                >
+                    <div
+                        style={{
+                            background: darkMode ? "#2a2a2a" : "#f9f9f9",
+                            padding: "15px",
+                            borderRadius: "10px",
+                            color: darkMode ? "white" : "black",
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
+                        }}
+                    >
+                        🏋️ Workout Totali: <b>{totalWorkouts}</b>
+                    </div>
+
+                    <div
+                        style={{
+                            background: darkMode ? "#2a2a2a" : "#f9f9f9",
+                            padding: "15px",
+                            borderRadius: "10px",
+                            color: darkMode ? "white" : "black",
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
+                        }}
+                    >
+                        ⏱ Totale Minuti: <b>{totalMinutes}</b>
+                    </div>
+
+                    <div
+                        style={{
+                            background: darkMode ? "#2a2a2a" : "#f9f9f9",
+                            padding: "15px",
+                            borderRadius: "10px",
+                            color: darkMode ? "white" : "black",
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
+                        }}
+                    >
+                        🔥 Media Workout: <b>{averageMinutes} min</b>
+                    </div>
+                </div>
 
                 {/* FORM */}
                 <form
