@@ -309,9 +309,22 @@ function Dashboard() {
                     </h3>
 
                     <ResponsiveContainer width="100%" height="85%">
-                        <BarChart data={chartData}>
-                            <XAxis dataKey="name" />
-                            <YAxis />
+                        <BarChart
+                            data={chartData}
+                            margin={{
+                                top: 10,
+                                right: 20,
+                                left: -20,
+                                bottom: 5,
+                            }}
+                        >
+                            <XAxis
+                                dataKey="name"
+                                tick={{ fill: darkMode ? "#ccc" : "#555" }}
+                            />
+                            <YAxis
+                                tick={{ fill: darkMode ? "#ccc" : "#555" }}
+                            />
                             <Tooltip />
                             <Bar dataKey="minuti" fill="#4CAF50" />
                         </BarChart>
