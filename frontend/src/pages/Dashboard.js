@@ -190,7 +190,9 @@ function Dashboard() {
         <div
             style={{
                 minHeight: "100vh",
-                background: darkMode ? "#121212" : "#f4f6f8",
+                background: darkMode
+                    ? "linear-gradient(to bottom, #121212, #1e1e1e)"
+                    : "linear-gradient(to bottom, #f4f6f8, #e9eef2)",
                 display: "flex",
                 justifyContent: "center",
                 padding: "40px 15px",
@@ -203,7 +205,7 @@ function Dashboard() {
                     background: darkMode ? "#1e1e1e" : "#fff",
                     padding: "25px",
                     borderRadius: "12px",
-                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
                 }}
             >
                 <h2
@@ -213,7 +215,7 @@ function Dashboard() {
                         color: darkMode ? "white" : "black",
                     }}
                 >
-                    FitTrack 💪
+                    🏋️ FitTrack Pro
                 </h2>
 
                 <button
@@ -412,7 +414,7 @@ function Dashboard() {
                         style={{
                             width: "100%",
                             padding: "12px",
-                            background: "#4CAF50",
+                            background: "linear-gradient(90deg, #4CAF50, #45d06f)",
                             color: "white",
                             border: "none",
                             borderRadius: "6px",
@@ -433,13 +435,13 @@ function Dashboard() {
                         <div
                             key={w._id}
                             style={{
-                                background: "#ffffff",
+                                background: darkMode ? "#2a2a2a" : "#ffffff",
                                 padding: "15px",
                                 borderRadius: "10px",
                                 marginBottom: "12px",
                                 textAlign: "left",
                                 boxShadow:
-                                    "0 2px 8px rgba(0,0,0,0.08)",
+                                    "0 2px 8px rgba(0,0,0,0.12)",
                             }}
                         >
                             {editingId === w._id ? (
@@ -526,7 +528,7 @@ function Dashboard() {
                                             margin: "0 0 5px 0",
                                         }}
                                     >
-                                        {w.exercise}
+                                        🔥 {w.exercise}
                                     </p>
 
                                     <p
