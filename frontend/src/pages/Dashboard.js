@@ -15,6 +15,7 @@ function Dashboard() {
     const [exercise, setExercise] = useState("");
     const [duration, setDuration] = useState("");
     const [notes, setNotes] = useState("");
+    const [search, setSearch] = useState("");
     const [editingId, setEditingId] = useState(null);
 
     const [editExercise, setEditExercise] = useState("");
@@ -165,6 +166,12 @@ function Dashboard() {
                 : workout.exercise,
         minuti: workout.duration,
     }));
+
+    const filteredWorkouts = workouts.filter((workout) =>
+        workout.exercise
+            .toLowerCase()
+            .includes(search.toLowerCase())
+    );
 
     // LOGOUT
     const handleLogout = () => {
@@ -331,6 +338,22 @@ function Dashboard() {
                     </ResponsiveContainer>
                 </div>
 
+                <input
+                    placeholder="🔎 Cerca workout..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    style={{
+                        width: "100%",
+                        padding: "12px",
+                        marginBottom: "20px",
+                        borderRadius: "8px",
+                        border: "1px solid #ccc",
+                        boxSizing: "border-box",
+                        background: darkMode ? "#2a2a2a" : "white",
+                        color: darkMode ? "white" : "black",
+                    }}
+                />
+
                 {/* FORM */}
                 <form
                     onSubmit={handleSubmit}
@@ -406,7 +429,7 @@ function Dashboard() {
                         Nessun workout
                     </p>
                 ) : (
-                    workouts.map((w) => (
+                    filteredWorkouts.map((w) => (
                         <div
                             key={w._id}
                             style={{
