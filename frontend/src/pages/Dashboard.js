@@ -308,7 +308,7 @@ function Dashboard() {
                         📊 Workout Chart
                     </h3>
 
-                    <ResponsiveContainer width="99%" height="90%">
+                    <ResponsiveContainer width="100%" height={220}>
                         <BarChart
                             data={chartData}
                             margin={{
