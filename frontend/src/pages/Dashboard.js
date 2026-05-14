@@ -118,6 +118,60 @@ function Dashboard() {
         }
     };
 
+    const handleUpdate = async (workout) => {
+
+        const newExercise = prompt(
+            "Nuovo esercizio",
+            workout.exercise
+        );
+
+        const newDuration = prompt(
+            "Nuova durata",
+            workout.duration
+        );
+
+        const newNotes = prompt(
+            "Nuove note",
+            workout.notes
+        );
+
+        if (!newExercise || !newDuration) return;
+
+        try {
+
+            await axios.put(
+                `https://fittrack-k81j.onrender.com/api/workouts/${workout._id}`,
+                {
+                    exercise: newExercise,
+                    duration: Number(newDuration),
+                    notes: newNotes,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${getToken()}`,
+                    },
+                }
+            );
+
+            setMessage("✏️ Workout modificato!");
+            setMessageType("success");
+
+            fetchWorkouts();
+
+            setTimeout(() => {
+                setMessage("");
+                setMessageType("");
+            }, 3000);
+
+        } catch (error) {
+
+            console.error("UPDATE ERROR:", error);
+
+            setMessage("❌ Errore modifica");
+            setMessageType("error");
+        }
+    };
+
     // DELETE
     const handleDelete = async (id) => {
         try {
@@ -714,6 +768,23 @@ function Dashboard() {
                             </p>
 
 
+
+                            <button
+                                onClick={() => handleUpdate(w)}
+                                style={{
+                                    background:
+                                        "linear-gradient(135deg, #22c55e, #16a34a)",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "10px 14px",
+                                    borderRadius: "12px",
+                                    cursor: "pointer",
+                                    marginRight: "10px",
+                                    fontWeight: "600",
+                                }}
+                            >
+                                ✏️ Modifica
+                            </button>
 
                             <button
                                 onClick={() => setDeleteId(w._id)}
