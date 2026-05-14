@@ -16,13 +16,11 @@ function Dashboard() {
     const [duration, setDuration] = useState("");
     const [notes, setNotes] = useState("");
     const [search, setSearch] = useState("");
-    const [editingId, setEditingId] = useState(null);
+
 
     const [deleteId, setDeleteId] = useState(null);
 
-    const [editExercise, setEditExercise] = useState("");
-    const [editDuration, setEditDuration] = useState("");
-    const [editNotes, setEditNotes] = useState("");
+
     const [darkMode, setDarkMode] = useState(false);
     const getToken = () => localStorage.getItem("token");
 
@@ -117,41 +115,6 @@ function Dashboard() {
                 setMessage("");
                 setMessageType("");
             }, 3000);
-        }
-    };
-
-
-    // START EDIT
-    const startEdit = (workout) => {
-        setEditingId(workout._id);
-
-        setEditExercise(workout.exercise);
-        setEditDuration(workout.duration);
-        setEditNotes(workout.notes);
-    };
-
-    // SAVE EDIT
-    const saveEdit = async (id) => {
-        try {
-            await axios.put(
-                `https://fittrack-k81j.onrender.com/api/workouts/${id}`,
-                {
-                    exercise: editExercise,
-                    duration: Number(editDuration),
-                    notes: editNotes,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${getToken()}`,
-                    },
-                }
-            );
-
-            setEditingId(null);
-
-            fetchWorkouts();
-        } catch (error) {
-            console.error("UPDATE ERROR:", error);
         }
     };
 
@@ -750,22 +713,7 @@ function Dashboard() {
                                 ).toLocaleDateString()}
                             </p>
 
-                            <button
-                                onClick={() => startEdit(w)}
-                                style={{
-                                    background:
-                                        "linear-gradient(135deg, #22c55e, #16a34a)",
-                                    color: "white",
-                                    border: "none",
-                                    padding: "10px 14px",
-                                    borderRadius: "12px",
-                                    cursor: "pointer",
-                                    marginRight: "10px",
-                                    fontWeight: "600",
-                                }}
-                            >
-                                Modifica
-                            </button>
+
 
                             <button
                                 onClick={() => setDeleteId(w._id)}
