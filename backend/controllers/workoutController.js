@@ -21,13 +21,27 @@ exports.createWorkout = async (req, res) => {
 // GET
 exports.getWorkouts = async (req, res) => {
     try {
-        const workouts = await Workout.find({ user: req.user.id });
+
+        const search = req.query.search || "";
+
+        const workouts = await Workout.find({
+            user: req.user.id,
+
+            exercise: {
+                $regex: search,
+                $options: "i",
+            },
+        });
+
         res.json(workouts);
+
     } catch (error) {
-        res.status(500).json({ error: error.message });
+
+        res.status(500).json({
+            error: error.message,
+        });
     }
 };
-
 // DELETE
 exports.deleteWorkout = async (req, res) => {
     try {

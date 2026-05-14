@@ -18,6 +18,8 @@ function Dashboard() {
     const [search, setSearch] = useState("");
     const [editingId, setEditingId] = useState(null);
 
+    const [deleteId, setDeleteId] = useState(null);
+
     const [editExercise, setEditExercise] = useState("");
     const [editDuration, setEditDuration] = useState("");
     const [editNotes, setEditNotes] = useState("");
@@ -65,6 +67,9 @@ function Dashboard() {
     }, []);
 
     // CREATE
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState(""); // success | error
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -83,13 +88,35 @@ function Dashboard() {
                 }
             );
 
+            // SUCCESS MESSAGE
+            setMessage("✅ Workout aggiunto con successo!");
+            setMessageType("success");
+
+            // RESET INPUT
             setExercise("");
             setDuration("");
             setNotes("");
 
             fetchWorkouts();
+
+            // AUTO HIDE
+            setTimeout(() => {
+                setMessage("");
+                setMessageType("");
+            }, 3000);
+
         } catch (error) {
             console.error("POST ERROR:", error);
+
+            // ERROR MESSAGE
+            setMessage("❌ Errore durante il salvataggio del workout");
+            setMessageType("error");
+
+            // AUTO HIDE
+            setTimeout(() => {
+                setMessage("");
+                setMessageType("");
+            }, 3000);
         }
     };
 
@@ -140,9 +167,31 @@ function Dashboard() {
                 }
             );
 
+            setMessage("🗑️ Workout eliminato con successo!");
+            setMessageType("success");
+
+            setDeleteId(null);
+
             fetchWorkouts();
+
+            setTimeout(() => {
+                setMessage("");
+                setMessageType("");
+            }, 3000);
+
         } catch (error) {
+
             console.error("DELETE ERROR:", error);
+
+            setMessage("❌ Errore durante l'eliminazione");
+            setMessageType("error");
+
+            setDeleteId(null);
+
+            setTimeout(() => {
+                setMessage("");
+                setMessageType("");
+            }, 3000);
         }
     };
 
@@ -187,32 +236,48 @@ function Dashboard() {
         localStorage.setItem("darkMode", newMode);
     };
     return (
+
         <div
             style={{
                 minHeight: "100vh",
                 background: darkMode
-                    ? "linear-gradient(to bottom, #121212, #1e1e1e)"
-                    : "linear-gradient(to bottom, #f4f6f8, #e9eef2)",
+                    ? "linear-gradient(135deg, #0f172a, #111827, #1e293b)"
+                    : "linear-gradient(135deg, #dbeafe, #f8fafc, #e0f2fe)",
                 display: "flex",
                 justifyContent: "center",
-                padding: "40px 15px",
+                alignItems: "center",
+                padding: "40px 20px",
+                transition: "all 0.3s ease",
+                fontFamily: "'Inter', sans-serif",
             }}
         >
             <div
                 style={{
                     width: "100%",
-                    maxWidth: "380px",
-                    background: darkMode ? "#1e1e1e" : "#fff",
-                    padding: "25px",
-                    borderRadius: "12px",
-                    boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+                    maxWidth: "530px",
+                    background: darkMode
+                        ? "rgba(17, 24, 39, 0.88)"
+                        : "rgba(255,255,255,0.82)",
+                    backdropFilter: "blur(16px)",
+                    WebkitBackdropFilter: "blur(16px)",
+                    padding: "28px",
+                    borderRadius: "26px",
+                    boxShadow: darkMode
+                        ? "0 12px 40px rgba(0,0,0,0.45)"
+                        : "0 12px 40px rgba(0,0,0,0.12)",
+                    border: darkMode
+                        ? "1px solid rgba(255,255,255,0.08)"
+                        : "1px solid rgba(255,255,255,0.6)",
                 }}
             >
                 <h2
                     style={{
                         textAlign: "center",
-                        marginBottom: "20px",
-                        color: darkMode ? "white" : "black",
+                        marginBottom: "24px",
+                        color: darkMode ? "white" : "#0f172a",
+                        fontSize: "30px",
+                        fontWeight: "700",
+                        letterSpacing: "-1px",
                     }}
                 >
                     🏋️ FitTrack Pro
@@ -222,13 +287,19 @@ function Dashboard() {
                     onClick={handleLogout}
                     style={{
                         width: "100%",
-                        marginBottom: "15px",
-                        background: "#333",
+                        marginBottom: "14px",
+                        background:
+                            "linear-gradient(135deg, #ef4444, #dc2626)",
                         color: "white",
                         border: "none",
-                        padding: "10px",
-                        borderRadius: "6px",
+                        padding: "14px",
+                        borderRadius: "14px",
                         cursor: "pointer",
+                        fontWeight: "600",
+                        fontSize: "15px",
+                        boxShadow:
+                            "0 4px 14px rgba(239,68,68,0.35)",
+                        transition: "0.2s",
                     }}
                 >
                     Logout
@@ -238,13 +309,18 @@ function Dashboard() {
                     onClick={toggleDarkMode}
                     style={{
                         width: "100%",
-                        marginBottom: "15px",
-                        background: darkMode ? "#444" : "#ddd",
-                        color: darkMode ? "white" : "black",
+                        marginBottom: "20px",
+                        background: darkMode
+                            ? "linear-gradient(135deg, #334155, #1e293b)"
+                            : "linear-gradient(135deg, #f1f5f9, #e2e8f0)",
+                        color: darkMode ? "white" : "#0f172a",
                         border: "none",
-                        padding: "10px",
-                        borderRadius: "6px",
+                        padding: "14px",
+                        borderRadius: "14px",
                         cursor: "pointer",
+                        fontWeight: "600",
+                        fontSize: "15px",
+                        transition: "0.2s",
                     }}
                 >
                     {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
@@ -254,67 +330,71 @@ function Dashboard() {
                 <div
                     style={{
                         display: "grid",
-                        gridTemplateColumns: "1fr",
-                        gap: "10px",
-                        marginBottom: "20px",
+                        gap: "14px",
+                        marginBottom: "24px",
                     }}
                 >
-                    <div
-                        style={{
-                            background: darkMode ? "#2a2a2a" : "#f9f9f9",
-                            padding: "15px",
-                            borderRadius: "10px",
-                            color: darkMode ? "white" : "black",
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-                        }}
-                    >
-                        🏋️ Workout Totali: <b>{totalWorkouts}</b>
-                    </div>
-
-                    <div
-                        style={{
-                            background: darkMode ? "#2a2a2a" : "#f9f9f9",
-                            padding: "15px",
-                            borderRadius: "10px",
-                            color: darkMode ? "white" : "black",
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-                        }}
-                    >
-                        ⏱ Totale Minuti: <b>{totalMinutes}</b>
-                    </div>
-
-                    <div
-                        style={{
-                            background: darkMode ? "#2a2a2a" : "#f9f9f9",
-                            padding: "15px",
-                            borderRadius: "10px",
-                            color: darkMode ? "white" : "black",
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-                        }}
-                    >
-                        🔥 Media Workout: <b>{averageMinutes} min</b>
-                    </div>
+                    {[
+                        {
+                            icon: "🏋️",
+                            label: "Workout Totali",
+                            value: totalWorkouts,
+                        },
+                        {
+                            icon: "⏱",
+                            label: "Totale Minuti",
+                            value: totalMinutes,
+                        },
+                        {
+                            icon: "🔥",
+                            label: "Media Workout",
+                            value: `${averageMinutes} min`,
+                        },
+                    ].map((stat, index) => (
+                        <div
+                            key={index}
+                            style={{
+                                background: darkMode
+                                    ? "rgba(30,41,59,0.9)"
+                                    : "rgba(255,255,255,0.9)",
+                                padding: "18px",
+                                borderRadius: "18px",
+                                color: darkMode ? "white" : "#0f172a",
+                                boxShadow:
+                                    "0 4px 14px rgba(0,0,0,0.08)",
+                                fontSize: "15px",
+                                fontWeight: "500",
+                            }}
+                        >
+                            {stat.icon} {stat.label}:{" "}
+                            <b>{stat.value}</b>
+                        </div>
+                    ))}
                 </div>
 
                 {/* CHART */}
                 <div
                     style={{
-                        width: "100%",
-                        height: 280,
-                        background: darkMode ? "#1e1e1e" : "#fff",
-                        padding: "10px",
-                        borderRadius: "12px",
-                        marginBottom: "20px",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        width: "93%",
+                        height: 300,
+                        background: darkMode
+                            ? "rgba(30,41,59,0.95)"
+                            : "rgba(255,255,255,0.95)",
+                        padding: "18px",
+                        borderRadius: "22px",
+                        marginBottom: "24px",
+                        boxShadow:
+                            "0 4px 16px rgba(0,0,0,0.08)",
                     }}
                 >
                     <h3
                         style={{
-                            marginBottom: "15px",
-                            color: darkMode ? "white" : "black",
+                            marginBottom: "16px",
+                            color: darkMode ? "white" : "#0f172a",
+                            fontSize: "18px",
                         }}
                     >
-                        📊 Workout Chart
+                        📊 Workout Analytics
                     </h3>
 
                     <ResponsiveContainer width="100%" height={220}>
@@ -322,112 +402,285 @@ function Dashboard() {
                             data={chartData}
                             margin={{
                                 top: 10,
-                                right: 20,
+                                right: 10,
                                 left: -20,
                                 bottom: 5,
                             }}
                         >
                             <XAxis
                                 dataKey="name"
-                                tick={{ fill: darkMode ? "#ccc" : "#555" }}
+                                tick={{
+                                    fill: darkMode
+                                        ? "#cbd5e1"
+                                        : "#475569",
+                                }}
                             />
+
                             <YAxis
-                                tick={{ fill: darkMode ? "#ccc" : "#555" }}
+                                tick={{
+                                    fill: darkMode
+                                        ? "#cbd5e1"
+                                        : "#475569",
+                                }}
                             />
+
                             <Tooltip />
-                            <Bar dataKey="minuti" fill="#4CAF50" />
+
+                            <Bar
+                                dataKey="minuti"
+                                fill="#22c55e"
+                                radius={[12, 12, 0, 0]}
+                            />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
 
-                <input
-                    placeholder="🔎 Cerca workout..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                <div
                     style={{
-                        width: "100%",
-                        padding: "12px",
-                        marginBottom: "20px",
-                        borderRadius: "8px",
-                        border: "1px solid #ccc",
-                        boxSizing: "border-box",
-                        background: darkMode ? "#2a2a2a" : "white",
-                        color: darkMode ? "white" : "black",
+                        display: "flex",
+                        gap: "10px",
+                        marginBottom: "22px",
                     }}
-                />
+                >
+                    <input
+                        placeholder="🔎 Cerca workout..."
+                        value={search}
+                        onChange={(e) => {
 
+                            const value = e.target.value;
+
+                            setSearch(value);
+
+                            fetchWorkouts(value);
+                        }}
+                        style={{
+                            flex: 1,
+                            padding: "14px",
+                            borderRadius: "14px",
+                            border: darkMode
+                                ? "1px solid #334155"
+                                : "1px solid #dbe2ea",
+                            boxSizing: "border-box",
+                            background: darkMode
+                                ? "#1e293b"
+                                : "white",
+                            color: darkMode ? "white" : "#111827",
+                            fontSize: "14px",
+                            outline: "none",
+                        }}
+                    />
+
+                    <button
+                        onClick={() => {
+
+                            // RESET INPUT
+                            setSearch("");
+
+                            // RICARICA TUTTI I WORKOUT
+                            fetchWorkouts("");
+                        }}
+                        style={{
+                            padding: "14px 18px",
+                            border: "none",
+                            borderRadius: "14px",
+                            cursor: "pointer",
+                            fontWeight: "600",
+                            background: darkMode
+                                ? "linear-gradient(135deg, #334155, #1e293b)"
+                                : "linear-gradient(135deg, #e2e8f0, #cbd5e1)",
+                            color: darkMode ? "white" : "#0f172a",
+                            transition: "0.2s",
+                            whiteSpace: "nowrap",
+                        }}
+                    >
+                        ✖ Reset
+                    </button>
+                </div>
+                {/* ALERT CARD */}
+                {message && (
+                    <div
+                        style={{
+                            width: "100%",
+                            padding: "14px",
+                            marginBottom: "18px",
+                            borderRadius: "16px",
+                            fontWeight: "600",
+                            fontSize: "14px",
+                            textAlign: "center",
+                            color: "white",
+                            background:
+                                messageType === "success"
+                                    ? "linear-gradient(135deg, #22c55e, #16a34a)"
+                                    : "linear-gradient(135deg, #ef4444, #dc2626)",
+                            boxShadow:
+                                messageType === "success"
+                                    ? "0 4px 16px rgba(34,197,94,0.35)"
+                                    : "0 4px 16px rgba(239,68,68,0.35)",
+                            animation: "fadeIn 0.3s ease",
+                        }}
+                    >
+                        {message}
+                    </div>
+                )}
                 {/* FORM */}
                 <form
                     onSubmit={handleSubmit}
-                    style={{ marginBottom: "20px" }}
+                    style={{ marginBottom: "22px" }}
                 >
-                    <input
-                        placeholder="Esercizio"
-                        value={exercise}
-                        onChange={(e) =>
-                            setExercise(e.target.value)
-                        }
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            marginBottom: "12px",
-                            borderRadius: "6px",
-                            border: "1px solid #ccc",
-                            boxSizing: "border-box",
-                        }}
-                    />
-
-                    <input
-                        placeholder="Durata (min)"
-                        value={duration}
-                        onChange={(e) =>
-                            setDuration(e.target.value)
-                        }
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            marginBottom: "12px",
-                            borderRadius: "6px",
-                            border: "1px solid #ccc",
-                            boxSizing: "border-box",
-                        }}
-                    />
-
-                    <input
-                        placeholder="Note"
-                        value={notes}
-                        onChange={(e) =>
-                            setNotes(e.target.value)
-                        }
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            marginBottom: "12px",
-                            borderRadius: "6px",
-                            border: "1px solid #ccc",
-                            boxSizing: "border-box",
-                        }}
-                    />
+                    {[
+                        {
+                            placeholder: "Esercizio",
+                            value: exercise,
+                            setter: setExercise,
+                        },
+                        {
+                            placeholder: "Durata (min)",
+                            value: duration,
+                            setter: setDuration,
+                        },
+                        {
+                            placeholder: "Note",
+                            value: notes,
+                            setter: setNotes,
+                        },
+                    ].map((field, index) => (
+                        <input
+                            key={index}
+                            placeholder={field.placeholder}
+                            value={field.value}
+                            onChange={(e) =>
+                                field.setter(e.target.value)
+                            }
+                            style={{
+                                width: "100%",
+                                padding: "14px",
+                                marginBottom: "14px",
+                                borderRadius: "14px",
+                                border: darkMode
+                                    ? "1px solid #334155"
+                                    : "1px solid #dbe2ea",
+                                boxSizing: "border-box",
+                                background: darkMode
+                                    ? "#1e293b"
+                                    : "white",
+                                color: darkMode
+                                    ? "white"
+                                    : "#111827",
+                                fontSize: "14px",
+                                outline: "none",
+                            }}
+                        />
+                    ))}
 
                     <button
                         type="submit"
                         style={{
                             width: "100%",
-                            padding: "12px",
-                            background: "linear-gradient(90deg, #4CAF50, #45d06f)",
+                            padding: "15px",
+                            background:
+                                "linear-gradient(135deg, #22c55e, #16a34a)",
                             color: "white",
                             border: "none",
-                            borderRadius: "6px",
+                            borderRadius: "16px",
                             cursor: "pointer",
+                            fontWeight: "700",
+                            fontSize: "15px",
+                            boxShadow:
+                                "0 4px 16px rgba(34,197,94,0.35)",
                         }}
                     >
-                        Aggiungi Workout
+                        ➕ Aggiungi Workout
                     </button>
                 </form>
+                {/* DELETE CONFIRM CARD */}
+                {deleteId && (
+                    <div
+                        style={{
+                            width: "100%",
+                            padding: "20px",
+                            marginBottom: "20px",
+                            borderRadius: "20px",
+                            background: darkMode
+                                ? "rgba(30,41,59,0.95)"
+                                : "rgba(255,255,255,0.95)",
+                            boxShadow: "0 6px 20px rgba(0,0,0,0.12)",
+                            border: darkMode
+                                ? "1px solid rgba(255,255,255,0.08)"
+                                : "1px solid #e2e8f0",
+                            textAlign: "center",
+                            animation: "fadeIn 0.25s ease",
+                        }}
+                    >
+                        <h3
+                            style={{
+                                marginBottom: "12px",
+                                color: darkMode ? "white" : "#0f172a",
+                            }}
+                        >
+                            ⚠️ Conferma Eliminazione
+                        </h3>
 
+                        <p
+                            style={{
+                                marginBottom: "20px",
+                                color: darkMode ? "#cbd5e1" : "#475569",
+                            }}
+                        >
+                            Sei sicuro di voler eliminare questo workout?
+                        </p>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                gap: "12px",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <button
+                                onClick={() => handleDelete(deleteId)}
+                                style={{
+                                    background:
+                                        "linear-gradient(135deg, #ef4444, #dc2626)",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "12px 18px",
+                                    borderRadius: "12px",
+                                    cursor: "pointer",
+                                    fontWeight: "600",
+                                }}
+                            >
+                                ✅ Si continua
+                            </button>
+
+                            <button
+                                onClick={() => setDeleteId(null)}
+                                style={{
+                                    background: darkMode
+                                        ? "#334155"
+                                        : "#e2e8f0",
+                                    color: darkMode ? "white" : "#0f172a",
+                                    border: "none",
+                                    padding: "12px 18px",
+                                    borderRadius: "12px",
+                                    cursor: "pointer",
+                                    fontWeight: "600",
+                                }}
+                            >
+                                Annulla
+                            </button>
+                        </div>
+                    </div>
+                )}
                 {/* LISTA */}
                 {workouts.length === 0 ? (
-                    <p style={{ textAlign: "center" }}>
+                    <p
+                        style={{
+                            textAlign: "center",
+                            color: darkMode
+                                ? "#cbd5e1"
+                                : "#64748b",
+                        }}
+                    >
                         Nessun workout
                     </p>
                 ) : (
@@ -435,155 +688,100 @@ function Dashboard() {
                         <div
                             key={w._id}
                             style={{
-                                background: darkMode ? "#2a2a2a" : "#ffffff",
-                                padding: "15px",
-                                borderRadius: "10px",
-                                marginBottom: "12px",
+                                background: darkMode
+                                    ? "rgba(30,41,59,0.95)"
+                                    : "rgba(255,255,255,0.95)",
+                                padding: "18px",
+                                borderRadius: "20px",
+                                marginBottom: "16px",
                                 textAlign: "left",
                                 boxShadow:
-                                    "0 2px 8px rgba(0,0,0,0.12)",
+                                    "0 4px 14px rgba(0,0,0,0.08)",
+                                transition: "0.2s",
                             }}
                         >
-                            {editingId === w._id ? (
-                                <>
-                                    <input
-                                        value={editExercise}
-                                        onChange={(e) =>
-                                            setEditExercise(e.target.value)
-                                        }
-                                        style={{
-                                            width: "100%",
-                                            padding: "8px",
-                                            marginBottom: "8px",
-                                            borderRadius: "6px",
-                                            border: "1px solid #ccc",
-                                            boxSizing: "border-box",
-                                        }}
-                                    />
+                            <p
+                                style={{
+                                    fontWeight: "700",
+                                    fontSize: "18px",
+                                    marginBottom: "8px",
+                                    color: darkMode
+                                        ? "white"
+                                        : "#0f172a",
+                                }}
+                            >
+                                🔥 {w.exercise}
+                            </p>
 
-                                    <input
-                                        value={editDuration}
-                                        onChange={(e) =>
-                                            setEditDuration(e.target.value)
-                                        }
-                                        style={{
-                                            width: "100%",
-                                            padding: "8px",
-                                            marginBottom: "8px",
-                                            borderRadius: "6px",
-                                            border: "1px solid #ccc",
-                                            boxSizing: "border-box",
-                                        }}
-                                    />
+                            <p
+                                style={{
+                                    marginBottom: "8px",
+                                    color: darkMode
+                                        ? "#cbd5e1"
+                                        : "#475569",
+                                }}
+                            >
+                                ⏱ {w.duration} min
+                            </p>
 
-                                    <input
-                                        value={editNotes}
-                                        onChange={(e) =>
-                                            setEditNotes(e.target.value)
-                                        }
-                                        style={{
-                                            width: "100%",
-                                            padding: "8px",
-                                            marginBottom: "10px",
-                                            borderRadius: "6px",
-                                            border: "1px solid #ccc",
-                                            boxSizing: "border-box",
-                                        }}
-                                    />
+                            <p
+                                style={{
+                                    marginBottom: "12px",
+                                    color: darkMode
+                                        ? "#e2e8f0"
+                                        : "#334155",
+                                }}
+                            >
+                                {w.notes}
+                            </p>
 
-                                    <button
-                                        onClick={() => saveEdit(w._id)}
-                                        style={{
-                                            background: "#4CAF50",
-                                            color: "white",
-                                            border: "none",
-                                            padding: "6px 10px",
-                                            borderRadius: "5px",
-                                            cursor: "pointer",
-                                            marginRight: "10px",
-                                        }}
-                                    >
-                                        Salva
-                                    </button>
+                            <p
+                                style={{
+                                    fontSize: "12px",
+                                    color: darkMode
+                                        ? "#94a3b8"
+                                        : "#64748b",
+                                    marginBottom: "14px",
+                                }}
+                            >
+                                📅{" "}
+                                {new Date(
+                                    w.createdAt
+                                ).toLocaleDateString()}
+                            </p>
 
-                                    <button
-                                        onClick={() => setEditingId(null)}
-                                        style={{
-                                            background: "#999",
-                                            color: "white",
-                                            border: "none",
-                                            padding: "6px 10px",
-                                            borderRadius: "5px",
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        Annulla
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <p
-                                        style={{
-                                            fontWeight: "bold",
-                                            margin: "0 0 5px 0",
-                                        }}
-                                    >
-                                        🔥 {w.exercise}
-                                    </p>
+                            <button
+                                onClick={() => startEdit(w)}
+                                style={{
+                                    background:
+                                        "linear-gradient(135deg, #22c55e, #16a34a)",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "10px 14px",
+                                    borderRadius: "12px",
+                                    cursor: "pointer",
+                                    marginRight: "10px",
+                                    fontWeight: "600",
+                                }}
+                            >
+                                Modifica
+                            </button>
 
-                                    <p
-                                        style={{
-                                            margin: "0 0 5px 0",
-                                            color: "#555",
-                                        }}
-                                    >
-                                        ⏱ {w.duration} min
-                                    </p>
-
-                                    <p style={{ margin: "0 0 10px 0" }}>
-                                        {w.notes}
-                                    </p>
-
-                                    <p
-                                        style={{
-                                            fontSize: "12px",
-                                            color: darkMode ? "#bbb" : "#777",
-                                            marginBottom: "10px",
-                                        }}
-                                    >
-                                        📅 {new Date(w.createdAt).toLocaleDateString()}
-                                    </p>
-
-                                    <button
-                                        onClick={() => startEdit(w)}
-                                        style={{
-                                            background: "#4CAF50",
-                                            color: "white",
-                                            border: "none",
-                                            padding: "6px 10px",
-                                            borderRadius: "5px",
-                                            cursor: "pointer",
-                                            marginRight: "10px",
-                                        }}
-                                    >
-                                        Modifica
-                                    </button>
-
-                                    <button
-                                        onClick={() => handleDelete(w._id)}
-                                        style={{
-                                            background: "#ff4d4d",
-                                            color: "white",
-                                            border: "none",
-                                            padding: "6px 10px",
-                                            borderRadius: "5px",
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        Elimina
-                                    </button>
-                                </>
-                            )}
+                            <button
+                                onClick={() => setDeleteId(w._id)}
+                                style={{
+                                    background:
+                                        "linear-gradient(135deg, #ef4444, #dc2626)",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "10px 14px",
+                                    borderRadius: "12px",
+                                    cursor: "pointer",
+                                    fontWeight: "600",
+                                }}
+                            >
+                                Elimina
+                            </button>
                         </div>
                     ))
                 )}
@@ -591,5 +789,4 @@ function Dashboard() {
         </div>
     );
 }
-
 export default Dashboard;
