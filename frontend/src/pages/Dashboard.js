@@ -690,16 +690,44 @@ function Dashboard() {
                 )}
                 {/* LISTA */}
                 {workouts.length === 0 ? (
-                    <p
+                    <div
                         style={{
                             textAlign: "center",
-                            color: darkMode
-                                ? "#cbd5e1"
-                                : "#64748b",
+                            padding: "40px 20px",
+                            borderRadius: "22px",
+                            background: darkMode
+                                ? "rgba(30,41,59,0.95)"
+                                : "rgba(255,255,255,0.95)",
+                            boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
                         }}
                     >
-                        Nessun workout
-                    </p>
+                        <div
+                            style={{
+                                fontSize: "55px",
+                                marginBottom: "16px",
+                            }}
+                        >
+                            🏋️
+                        </div>
+
+                        <h3
+                            style={{
+                                color: darkMode ? "white" : "#0f172a",
+                                marginBottom: "10px",
+                            }}
+                        >
+                            Nessun workout ancora
+                        </h3>
+
+                        <p
+                            style={{
+                                color: darkMode ? "#cbd5e1" : "#64748b",
+                                fontSize: "14px",
+                            }}
+                        >
+                            Inizia aggiungendo il tuo primo allenamento 🚀
+                        </p>
+                    </div>
                 ) : (
                     filteredWorkouts.map((w) => (
                         <div
